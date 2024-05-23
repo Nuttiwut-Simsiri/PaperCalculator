@@ -59,6 +59,9 @@ export default function Home() {
 
     var prod_q_with_m = Math.ceil(orderQ / (q_per_m))
 
+    console.log("q_per_m is : ", q_per_m)
+    console.log("q_per_s is : ", q_per_s)
+
     // var result = getPaperQ(orderQ, [q_per_m, q_per_s])
 
     // var result = countMinCoinsUtil(orderQ, [q_per_s, q_per_m], 2);
