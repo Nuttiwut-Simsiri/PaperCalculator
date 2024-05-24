@@ -16,6 +16,7 @@ export default function Home() {
   const [cutterSize, setCutterSize] = useState(2);
 
   const [isColor, setIsColor] = useState(false);
+  const [isNeedMoreGap, setIsNeedMoreGap] = useState(false);
 
   const [paperWR, setPaperWR] = useState(100);
 
@@ -37,9 +38,10 @@ export default function Home() {
 
   useEffect(() => {
     var color_factor = isColor ? 4 : 0
-    var temp = (paperW * cutterSize) + centerGap + slidLR + color_factor
+    var gap_factor = isNeedMoreGap ? 2 : 0
+    var temp = (paperW * cutterSize) + centerGap + slidLR + color_factor + gap_factor
     setPaperWR(temp)
-  }, [centerGap, slidLR, paperW, cutterSize, isColor])
+  }, [centerGap, slidLR, paperW, cutterSize, isColor, isNeedMoreGap])
 
   useEffect(() => {
     var b = paperH + paperGap
@@ -95,14 +97,25 @@ export default function Home() {
         </div>
       </label>
 
-      <label>
-        <div className="form-control w-full">
-          <label className="label cursor-pointer">
-            <span className="label-text px-10"> ทำสี ?</span>
-            <input type="checkbox" defaultChecked={isColor} className="checkbox checkbox-primary" onChange={(e) => setIsColor(e.target.checked)} />
-          </label>
-        </div>
-      </label>
+      <div className='flex gap-8'>
+        <label>
+          <div className="form-control w-full">
+            <label className="label cursor-pointer">
+              <span className="label-text px-10"> ทำสี ?</span>
+              <input name="color" type="checkbox" defaultChecked={isColor} className="checkbox checkbox-primary" onChange={(e) => setIsColor(e.target.checked)} />
+            </label>
+          </div>
+        </label>
+        <label>
+          <div className="form-control w-full">
+            <label className="label cursor-pointer">
+              <span className="label-text px-10"> ดวงห่าง ?</span>
+              <input name="gap" type="checkbox" defaultChecked={isNeedMoreGap} className="checkbox checkbox-secondary" onChange={(e) => setIsNeedMoreGap(e.target.checked)} />
+            </label>
+          </div>
+        </label>
+
+      </div>
 
       <label className="form-control w-full max-w-xs">
         <div className="label">
