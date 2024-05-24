@@ -59,69 +59,72 @@ export default function Home() {
   }, [paperH, paperGap, orderQ, cutterSize])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 gap-4">
-
-      <div className="text-xl"> คำนวณหน้ากระดาษ</div>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Gap ตรงกลาง (มิลลิเมตร)</span>
-        </div>
-        <input type="number" defaultValue={centerGap} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setCenterGap(Number(e.target.value))} />
-        <div className="label">
-        </div>
-      </label>
-
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">สลิดซ้ายขวา (มิลลิเมตร)</span>
-        </div>
-        <input type="number" defaultValue={slidLR} placeholder="ขนาดมีด" className="input input-bordered w-full max-w-xs" onChange={(e) => setSlidLR(Number(e.target.value))} />
-        <div className="label">
-        </div>
-      </label>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">หน้ากว้าง (มิลลิเมตร)</span>
-        </div>
-        <input type="number" placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setPaperW(Number(e.target.value))} />
-        <div className="label">
-        </div>
-      </label>
-
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">มีด (มิลลิเมตร)</span>
-        </div>
-        <input type="number" placeholder="ขนาดมีด" className="input input-bordered w-full max-w-xs" onChange={(e) => setCutterSize(Number(e.target.value))} />
-        <div className="label">
-        </div>
-      </label>
-
-      <div className='flex gap-8'>
-        <label>
-          <div className="form-control w-full">
-            <label className="label cursor-pointer">
-              <span className="label-text px-10"> ทำสี ?</span>
-              <input name="color" type="checkbox" defaultChecked={isColor} className="checkbox checkbox-primary" onChange={(e) => setIsColor(e.target.checked)} />
-            </label>
+    <main className="flex min-h-screen flex-col items-center justify-between mobile:p-12 p-20 gap-4">
+      <div>
+        <div className="text-2xl"> คำนวณหน้ากระดาษ</div>
+        <label className="form-control w-full max-w-xs">
+          <div className="label">
+            <span className="label-text">Gap ตรงกลาง (มิลลิเมตร)</span>
+          </div>
+          <input type="number" defaultValue={centerGap} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setCenterGap(Number(e.target.value))} />
+          <div className="label">
           </div>
         </label>
-        <label>
-          <div className="form-control w-full">
-            <label className="label cursor-pointer">
-              <span className="label-text px-10"> ดวงห่าง ?</span>
-              <input name="gap" type="checkbox" defaultChecked={isNeedMoreGap} className="checkbox checkbox-secondary" onChange={(e) => setIsNeedMoreGap(e.target.checked)} />
-            </label>
+
+        <label className="form-control w-full max-w-xs">
+          <div className="label">
+            <span className="label-text">สลิดซ้ายขวา (มิลลิเมตร)</span>
+          </div>
+          <input type="number" defaultValue={slidLR} placeholder="ขนาดมีด" className="input input-bordered w-full max-w-xs" onChange={(e) => setSlidLR(Number(e.target.value))} />
+          <div className="label">
           </div>
         </label>
+        <label className="form-control w-full max-w-xs">
+          <div className="label">
+            <span className="label-text">หน้ากว้าง (มิลลิเมตร)</span>
+          </div>
+          <input type="number" placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setPaperW(Number(e.target.value))} />
+          <div className="label">
+          </div>
+        </label>
+
+        <label className="form-control w-full max-w-xs">
+          <div className="label">
+            <span className="label-text">มีด (มิลลิเมตร)</span>
+          </div>
+          <input type="number" placeholder="ขนาดมีด" className="input input-bordered w-full max-w-xs" onChange={(e) => setCutterSize(Number(e.target.value))} />
+          <div className="label">
+          </div>
+        </label>
+
+        <div className='grid grid-cols-2 gap-4'>
+          <div>
+            <div className="form-control">
+              <label className="label cursor-pointer gap-2">
+                <input name="color" type="checkbox" defaultChecked={isColor} className="checkbox checkbox-primary" onChange={(e) => setIsColor(e.target.checked)} />
+                <span className="label-text"> สี ?</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <div className="form-control">
+              <label className="label cursor-pointer gap-2">
+                <input name="gap" type="checkbox" defaultChecked={isNeedMoreGap} className="checkbox checkbox-success" onChange={(e) => setIsNeedMoreGap(e.target.checked)} />
+                <span className="label-text"> ดวงห่าง ?</span>
+              </label>
+            </div>
+          </div>
+        </div>
 
       </div>
 
-      <label className="form-control w-full max-w-xs">
+
+      <div className="divider divider-primary"></div>
+      <label className="form-control  w-full max-w-xs">
         <div className="label">
-          <span className="label-text font-bold text-xl text-rose-400">ต้องสั่งหน้ากระดาษ</span>
+          <span className="label-text font-bold text-xl text-rose-600">ต้องสั่งหน้ากระดาษ</span>
         </div>
-        <input type="number" className="input input-bordered w-full max-w-xs text-rose-600 font-bold" value={paperWR} readOnly={true} />
+        <input type="number" className="input input-bordered w-full max-w-xs text-rose-100 font-extrabold text-center" value={paperWR} readOnly={true} />
         <div className="label">
         </div>
       </label>
@@ -130,12 +133,12 @@ export default function Home() {
 
 
 
-      <div className="text-xl"> คำนวณจำนวนผลิต</div>
+      <div className="text-2xl"> คำนวณจำนวนผลิต</div>
       <label className="form-control w-full max-w-xs">
         <div className="label">
           <span className="label-text">หน้าสูง (เซนติเมตร)</span>
         </div>
-        <input type="number" defaultValue={paperH} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setPaperH(Number(e.target.value))} />
+        <input type="number" defaultValue={paperH} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setPaperH(Number(e.target.value))} step={0.5}/>
         <div className="label">
         </div>
       </label>
@@ -144,7 +147,7 @@ export default function Home() {
         <div className="label">
           <span className="label-text"> Gap (เซนติเมตร)</span>
         </div>
-        <input type="number" defaultValue={paperGap} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setPaperGap(Number(e.target.value))} />
+        <input type="number" defaultValue={paperGap} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setPaperGap(Number(e.target.value))} step={0.5}/>
         <div className="label">
         </div>
       </label>
@@ -158,25 +161,29 @@ export default function Home() {
         </div>
       </label>
 
-      <div className="divider divider-success"></div>
 
+      <div className="divider divider-accent"></div>
       <label className="form-control w-full max-w-xs ">
         <div className="label">
-          <span className="label-text font-bold text-xl text-rose-400"> จำนวนม้วนที่ต้องสั่ง </span>
+          <span className="label-text font-extrabold text-xl text-rose-500"> จำนวนม้วนที่ต้องสั่ง </span>
         </div>
+        <div className='grid grid-cols-2 gap-4'>
         {
           paperToOrder.map((el, index) => {
             return (
-              <div className="label" key={el.paperT}>
-                <span className="label-text font-bold text-xl text-rose-400"> {el.paperT} </span>
-                <input type="number" defaultValue={el.orderQ} className="input input-bordered w-full max-w-xs" readOnly={true} />
+              <div className="label gap-2" key={el.paperT}>
+                <span className="label-text text-sm text-rose-600"> {el.paperT} </span>
+                <input type="number" defaultValue={el.orderQ} className="input input-bordered w-full max-w-xs text-rose-100 font-extrabold text-center" readOnly={true} />
               </div>
             )
           })
         }
+        </div>
         <div className="label">
         </div>
       </label>
+
+      <div className="divider divider-accent"></div>
 
 
 
