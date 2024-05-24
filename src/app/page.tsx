@@ -20,7 +20,7 @@ export default function Home() {
 
   const [paperWR, setPaperWR] = useState(100);
 
-  
+
 
 
   const [paperH, setPaperH] = useState(5);
@@ -41,6 +41,10 @@ export default function Home() {
     ]);
 
   useEffect(() => {
+    setProdQ(orderQ - remainInStock)
+  }, [orderQ, remainInStock])
+
+  useEffect(() => {
     var color_factor = isColor ? 4 : 0
     var gap_factor = isNeedMoreGap ? 2 : 0
     var temp = (paperW * cutterSize) + centerGap + slidLR + color_factor + gap_factor
@@ -48,6 +52,8 @@ export default function Home() {
   }, [centerGap, slidLR, paperW, cutterSize, isColor, isNeedMoreGap])
 
   useEffect(() => {
+    if (prodQ <= 0) return
+
     var b = paperH + paperGap
 
     var paper_m = 100_000 / b
@@ -62,12 +68,8 @@ export default function Home() {
 
   }, [paperH, paperGap, prodQ, cutterSize])
 
-  useEffect(() => {
-    setProdQ(orderQ  - remainInStock)
-  }, [orderQ, remainInStock])
 
 
-  
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between mobile:p-12 p-20 gap-4">
@@ -163,32 +165,36 @@ export default function Home() {
         </div>
       </label>
 
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text text-white"> จำนวนที่สั่ง (ชิ้น)</span>
-        </div>
-        <input type="number" defaultValue={orderQ} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setOrderQ(Number(e.target.value))} step={1000} />
-        <div className="label">
-        </div>
-      </label>
+      <div className='grid  mobile:grid-cols-2 grid-cols-3 gap-2'>
+        <label className="form-control w-full max-w-xs">
+          <div className="label">
+            <span className="label-text text-white"> จำนวนที่สั่ง (ชิ้น)</span>
+          </div>
+          <input type="number" defaultValue={orderQ} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setOrderQ(Number(e.target.value))} step={1000} />
+          <div className="label">
+          </div>
+        </label>
 
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text text-white"> ที่เหลือในสต๊อก (ชิ้น)</span>
-        </div>
-        <input type="number" defaultValue={remainInStock} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setRemainInStock(Number(e.target.value))} step={50} />
-        <div className="label">
-        </div>
-      </label>
+        <label className="form-control w-full max-w-xs">
+          <div className="label">
+            <span className="label-text text-white"> คงเหลือในสต๊อก (ชิ้น)</span>
+          </div>
+          <input type="number" defaultValue={remainInStock} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setRemainInStock(Number(e.target.value))} step={50} />
+          <div className="label">
+          </div>
+        </label>
 
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text text-white"> จำนวนที่จะผลิต (ชิ้น)</span>
-        </div>
-        <input type="number" defaultValue={prodQ} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" readOnly={true} />
-        <div className="label">
-        </div>
-      </label>
+        <label className="form-control w-full max-w-xs mobile:col-span-2">
+          <div className="label">
+            <span className="label-text text-white"> จำนวนที่ผลิต (ชิ้น)</span>
+          </div>
+          <input type="number" defaultValue={prodQ} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" readOnly={true} />
+          <div className="label">
+          </div>
+        </label>
+
+      </div>
+
 
 
       <div className="divider divider-accent"></div>
