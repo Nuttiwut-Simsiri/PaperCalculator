@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react'
 import calculatePapperRoll from '../../lib/calPaper';
+import { useDebounce } from 'use-debounce';
 
 type ResultProp = {
   paperT: string
@@ -14,6 +15,8 @@ export default function Home() {
 
   const [paperW, setPaperW] = useState(100);
   const [cutterSize, setCutterSize] = useState(2);
+
+  const [dbCutterSize] = useDebounce(cutterSize, 400);
 
   const [isColor, setIsColor] = useState(false);
   const [isNeedMoreGap, setIsNeedMoreGap] = useState(false);
@@ -46,10 +49,10 @@ export default function Home() {
 
   useEffect(() => {
     var color_factor = isColor ? 4 : 0
-    var gap_factor = isNeedMoreGap ? 2 : 0
-    var temp = (paperW * cutterSize) + centerGap + slidLR + color_factor + gap_factor + extendedGap
+    var gap_factor = isNeedMoreGap ? extendedGap : 0
+    var temp = (paperW * dbCutterSize) + centerGap + slidLR + color_factor + gap_factor 
     setPaperWR(temp)
-  }, [centerGap, slidLR, paperW, cutterSize, isColor, isNeedMoreGap, extendedGap])
+  }, [centerGap, slidLR, paperW, dbCutterSize, isColor, isNeedMoreGap, extendedGap])
 
   useEffect(() => {
     if (prodQ <= 0) return
@@ -59,17 +62,14 @@ export default function Home() {
     var paper_m = 100_000 / b
     var paper_s = 50_000 / b
 
-    var q_per_m = Math.floor(paper_m * cutterSize)
-    var q_per_s = Math.floor(paper_s * cutterSize)
+    var q_per_m = Math.floor(paper_m * dbCutterSize)
+    var q_per_s = Math.floor(paper_s * dbCutterSize)
 
     var result: ResultProp[] = calculatePapperRoll(prodQ, [q_per_s, q_per_m])
     console.log(result)
     setPaperToOrder([...result])
 
-  }, [paperH, paperGap, prodQ, cutterSize])
-
-
-
+  }, [paperH, paperGap, prodQ, dbCutterSize])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between mobile:p-12 p-20 gap-4">
@@ -136,7 +136,7 @@ export default function Home() {
                 <div className="label">
                   <span className="label-text text-white">Gap เสริม (มิลลิเมตร)</span>
                 </div>
-                <input type="number" defaultValue={extendedGap} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setExtendedGap(Number(e.target.value))} />
+                <input type="number" defaultValue={extendedGap} placeholder="ระยะที่ต้องเพิ่มในกรณีดวงห่าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setExtendedGap(Number(e.target.value))} />
                 <div className="label">
                 </div>
               </label>
@@ -242,10 +242,6 @@ export default function Home() {
       </label>
 
       <div className="divider divider-accent"></div>
-
-
-
-
     </main>
   );
 }
