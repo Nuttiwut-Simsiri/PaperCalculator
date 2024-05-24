@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react'
-
-
+import calculatePapperRoll from '../../lib/calPaper';
 
 
 export default function Home() {
@@ -13,7 +12,7 @@ export default function Home() {
 
   const [isColor, setIsColor] = useState(false);
 
-  const [paperWR, setPaperWR] = useState(0);
+  const [paperWR, setPaperWR] = useState(100);
 
 
   const [paperH, setPaperH] = useState(5);
@@ -23,29 +22,10 @@ export default function Home() {
   const [paperToOrderM, setPaperToOrderM] = useState(0);
   const [paperToOrderS, setPaperToOrderS] = useState(0);
 
-  // function waysToReturnChange(denominations : number[], numOfCoins : number, amount: number) {
-
-  //   if (amount === 0) return 1; // Perfect!
-
-  //   if (amount < 0) return 0; // No solution exists for negative amount
-
-  //   if (numOfCoins < 0 && amount > 0) return 0; // We don't have coins left!
-
-  //   console.log('checking ways to make ' + amount + ' with ' + denominations.slice(numOfCoins));
-    
-
-  //   return waysToReturnChange(denominations, numOfCoins, amount - denominations[numOfCoins]) +
-  //     waysToReturnChange(denominations, numOfCoins - 1, amount);
-  // }
-
-
   useEffect(() => {
     var color_factor = isColor ? 4 : 0
     var temp = (paperW * cutterSize) + centerGap + slidLR + color_factor
-    console.log("result is : ", temp)
-
     setPaperWR(temp)
-
   }, [centerGap, slidLR, paperW, cutterSize, isColor])
 
   useEffect(() => {
@@ -57,19 +37,10 @@ export default function Home() {
     var q_per_m = Math.floor(paper_m * cutterSize)
     var q_per_s = Math.floor(paper_s * cutterSize)
 
-    var prod_q_with_m = Math.ceil(orderQ / (q_per_m))
-
-    console.log("q_per_m is : ", q_per_m)
-    console.log("q_per_s is : ", q_per_s)
-
-    // var result = getPaperQ(orderQ, [q_per_m, q_per_s])
-
-    // var result = countMinCoinsUtil(orderQ, [q_per_s, q_per_m], 2);
-    setPaperToOrderS(prod_q_with_m)
-    // setPaperToOrderM(result)
-    // console.log("Size", [paper_s, paper_m])
-    // console.log("Per Roll M & S", [q_per_s, q_per_m])
-    // console.log("Result", result)
+    var result : ResultProp[] = calculatePapperRoll(orderQ, [q_per_m, q_per_s])
+    console.log(result)
+    setPaperToOrderS(result[0]?.orderQ)
+    setPaperToOrderM(result[1]?.orderQ)
 
   }, [paperH, paperGap, orderQ, cutterSize])
 
@@ -125,7 +96,7 @@ export default function Home() {
         <div className="label">
           <span className="label-text font-bold text-xl text-rose-400">ต้องสั่งหน้ากระดาษ</span>
         </div>
-        <input type="number" placeholder="" className="input input-bordered w-full max-w-xs text-rose-600 font-bold" value={paperWR} readOnly={true} />
+        <input type="number" className="input input-bordered w-full max-w-xs text-rose-600 font-bold" value={paperWR} readOnly={true} />
         <div className="label">
         </div>
       </label>
@@ -168,6 +139,8 @@ export default function Home() {
         <div className="label">
           <span className="label-text font-bold text-xl text-rose-400"> จำนวนม้วนที่ต้องสั่ง </span>
         </div>
+
+
         <div className="label">
           <span className="label-text font-bold text-xl text-rose-400"> ม้วนใหญ่ </span>
           <input type="number" defaultValue={paperToOrderM} className="input input-bordered w-full max-w-xs" readOnly={true} />
