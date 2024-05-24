@@ -20,7 +20,7 @@ export default function Home() {
 
   const [paperWR, setPaperWR] = useState(100);
 
-
+  const [extendedGap, setExtendedGap] = useState(2);
 
 
   const [paperH, setPaperH] = useState(5);
@@ -47,9 +47,9 @@ export default function Home() {
   useEffect(() => {
     var color_factor = isColor ? 4 : 0
     var gap_factor = isNeedMoreGap ? 2 : 0
-    var temp = (paperW * cutterSize) + centerGap + slidLR + color_factor + gap_factor
+    var temp = (paperW * cutterSize) + centerGap + slidLR + color_factor + gap_factor + extendedGap
     setPaperWR(temp)
-  }, [centerGap, slidLR, paperW, cutterSize, isColor, isNeedMoreGap])
+  }, [centerGap, slidLR, paperW, cutterSize, isColor, isNeedMoreGap, extendedGap])
 
   useEffect(() => {
     if (prodQ <= 0) return
@@ -127,7 +127,22 @@ export default function Home() {
               </label>
             </div>
           </div>
+
+          
         </div>
+        {
+            isNeedMoreGap ?
+              <label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text text-white">Gap เสริม (มิลลิเมตร)</span>
+                </div>
+                <input type="number" defaultValue={extendedGap} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setExtendedGap(Number(e.target.value))} />
+                <div className="label">
+                </div>
+              </label>
+
+              : <></>
+          }
 
       </div>
 
@@ -141,6 +156,14 @@ export default function Home() {
         <div className="label">
         </div>
       </label>
+
+      {/* <div className="grid grid-cols-4 gap-4">
+        {
+          Array.from({length: 16}, (_, index) => index + 1).map(el => {
+            return <div className='card bg-gray-700 w-48 text-center p-4 rounded-sm shadow-md'> {el} </div>
+          }) 
+        }
+      </div> */}
 
       <div className="divider divider-accent"></div>
 
@@ -208,7 +231,7 @@ export default function Home() {
               return (
                 <div className="label gap-2" key={el.paperT}>
                   <span className="label-text text-sm text-rose-300"> {el.paperT} </span>
-                  <input type="number" defaultValue={el.orderQ} className="input input-bordered w-full max-w-xs text-rose-100 font-extrabold text-center" readOnly={true} />
+                  <input type="number" value={el.orderQ} className="input input-bordered w-full max-w-xs text-rose-100 font-extrabold text-center" readOnly={true} />
                 </div>
               )
             })
