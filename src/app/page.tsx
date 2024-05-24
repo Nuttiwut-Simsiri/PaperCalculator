@@ -15,8 +15,7 @@ export default function Home() {
 
   const [paperW, setPaperW] = useState(100);
   const [cutterSize, setCutterSize] = useState(2);
-
-  const [dbCutterSize] = useDebounce(cutterSize, 400);
+  const [dbCutterSize] = useDebounce(cutterSize, 500);
 
   const [isColor, setIsColor] = useState(false);
   const [isNeedMoreGap, setIsNeedMoreGap] = useState(false);
@@ -48,31 +47,37 @@ export default function Home() {
   }, [orderQ, remainInStock])
 
   useEffect(() => {
+    if (!dbCutterSize) return
+    if (!paperW) return
+
     var color_factor = isColor ? 4 : 0
     var gap_factor = isNeedMoreGap ? extendedGap : 0
-    var temp = (paperW * dbCutterSize) + centerGap + slidLR + color_factor + gap_factor 
-    setPaperWR(temp)
+    var final_paper_w = (paperW * dbCutterSize) + centerGap + slidLR + color_factor + gap_factor 
+
+    setPaperWR(final_paper_w)
+
   }, [centerGap, slidLR, paperW, dbCutterSize, isColor, isNeedMoreGap, extendedGap])
 
   useEffect(() => {
     if (prodQ <= 0) return
+    if (!cutterSize) return
 
     var b = paperH + paperGap
 
     var paper_m = 100_000 / b
     var paper_s = 50_000 / b
 
-    var q_per_m = Math.floor(paper_m * dbCutterSize)
-    var q_per_s = Math.floor(paper_s * dbCutterSize)
+    var q_per_m = Math.floor(paper_m * cutterSize)
+    var q_per_s = Math.floor(paper_s * cutterSize)
 
     var result: ResultProp[] = calculatePapperRoll(prodQ, [q_per_s, q_per_m])
     console.log(result)
     setPaperToOrder([...result])
 
-  }, [paperH, paperGap, prodQ, dbCutterSize])
+  }, [paperH, paperGap, prodQ, cutterSize])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between mobile:p-12 p-20 gap-4">
+    <main data-theme="business" className="flex min-h-screen flex-col items-center justify-between mobile:p-12 p-20 gap-4">
       <div>
         <div className="text-3xl text-sky-600"> คำนวณหน้ากระดาษ</div>
         <label className="form-control w-full max-w-xs">
