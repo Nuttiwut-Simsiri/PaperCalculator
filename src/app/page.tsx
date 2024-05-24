@@ -2,6 +2,11 @@
 import React, { useState, useEffect } from 'react'
 import calculatePapperRoll from '../../lib/calPaper';
 
+type ResultProp = {
+  paperT: string
+  orderQ: number
+}
+
 
 export default function Home() {
   const [centerGap, setCenterGap] = useState(4);
@@ -19,8 +24,16 @@ export default function Home() {
   const [paperGap, setPaperGap] = useState(0.3);
   const [orderQ, setOrderQ] = useState(0);
 
-  const [paperToOrderM, setPaperToOrderM] = useState(0);
-  const [paperToOrderS, setPaperToOrderS] = useState(0);
+  const [paperToOrder, setPaperToOrder] = useState<ResultProp[]>(
+    [{
+      paperT: "ม้วนเล็ก",
+      orderQ: 0
+    },
+    {
+      paperT: "ม้วนใหญ่",
+      orderQ: 0
+    }
+    ]);
 
   useEffect(() => {
     var color_factor = isColor ? 4 : 0
@@ -37,10 +50,9 @@ export default function Home() {
     var q_per_m = Math.floor(paper_m * cutterSize)
     var q_per_s = Math.floor(paper_s * cutterSize)
 
-    var result : ResultProp[] = calculatePapperRoll(orderQ, [q_per_m, q_per_s])
+    var result: ResultProp[] = calculatePapperRoll(orderQ, [q_per_s, q_per_m])
     console.log(result)
-    setPaperToOrderS(result[0]?.orderQ)
-    setPaperToOrderM(result[1]?.orderQ)
+    setPaperToOrder([...result])
 
   }, [paperH, paperGap, orderQ, cutterSize])
 
@@ -139,17 +151,16 @@ export default function Home() {
         <div className="label">
           <span className="label-text font-bold text-xl text-rose-400"> จำนวนม้วนที่ต้องสั่ง </span>
         </div>
-
-
-        <div className="label">
-          <span className="label-text font-bold text-xl text-rose-400"> ม้วนใหญ่ </span>
-          <input type="number" defaultValue={paperToOrderM} className="input input-bordered w-full max-w-xs" readOnly={true} />
-        </div>
-        <div className="label">
-          <span className="label-text font-bold text-xl text-rose-400"> ม้วนเล็ก </span>
-          <input type="number" defaultValue={paperToOrderS} className="input input-bordered w-full max-w-xs" readOnly={true} />
-        </div>
-
+        {
+          paperToOrder.map((el, index) => {
+            return (
+              <div className="label" key={el.paperT}>
+                <span className="label-text font-bold text-xl text-rose-400"> {el.paperT} </span>
+                <input type="number" defaultValue={el.orderQ} className="input input-bordered w-full max-w-xs" readOnly={true} />
+              </div>
+            )
+          })
+        }
         <div className="label">
         </div>
       </label>

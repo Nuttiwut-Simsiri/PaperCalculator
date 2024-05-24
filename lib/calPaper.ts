@@ -1,5 +1,10 @@
+type ResultProp = {
+    paperT: string
+    orderQ: number
+}
 
-const innerCalPaper = (remainOrderQ : number, pprs: number [], result : ResultProp[]) => {
+
+function innerCalPaper (remainOrderQ : number, pprs: number [], result : ResultProp[]) {
     if (remainOrderQ <= 0) return result
 
     const comp_list = pprs.map( ppr => {
@@ -7,22 +12,26 @@ const innerCalPaper = (remainOrderQ : number, pprs: number [], result : ResultPr
     })
     
     const minRemain = Math.min(...comp_list)
+
     const isEqual = (element : number) => element == minRemain;
-    const isGreater = (element : number) => element >= minRemain;
-    var resultIndex = 0
-    console.log("minRemain ", minRemain)
-
+    const isGreater = (element : number) => minRemain >= element;
+    var update_index = 0
+    
     if (pprs.findIndex(isGreater) || minRemain == 0) {
-        resultIndex = comp_list.findIndex(isEqual)
+        update_index = comp_list.findIndex(isEqual)
     }else{
-        resultIndex = comp_list.findIndex(isGreater)
+        update_index = comp_list.findIndex(isGreater)
     }
-    
-    
-    // update paper order result
-    result[resultIndex].orderQ += 1
 
-    return innerCalPaper(comp_list[resultIndex], pprs, result)
+
+    console.log("--------------------------------------")
+    console.log("Before ", remainOrderQ)
+    console.log("Selected ", result[update_index]?.paperT)
+    console.log("Comp", comp_list)
+    console.log("After ", comp_list[update_index])
+    // update paper order result
+    result[update_index].orderQ += 1
+    return innerCalPaper(comp_list[update_index], pprs, result)
 }
 
 export default function calculatePapperRoll (orderNumber : number, pprs : number[]){
@@ -31,11 +40,11 @@ export default function calculatePapperRoll (orderNumber : number, pprs : number
     console.log("pprs ", pprs)
     const final_result : ResultProp[] | undefined = innerCalPaper(orderNumber, pprs, [
         {
-            paperT: "s",
+            paperT: "ม้วนเล็ก",
             orderQ: 0
         },
         {
-            paperT: "b",
+            paperT: "ม้วนใหญ่",
             orderQ: 0
         }
     ])
