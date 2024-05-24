@@ -20,10 +20,14 @@ export default function Home() {
 
   const [paperWR, setPaperWR] = useState(100);
 
+  
+
 
   const [paperH, setPaperH] = useState(5);
   const [paperGap, setPaperGap] = useState(0.3);
+  const [remainInStock, setRemainInStock] = useState(0)
   const [orderQ, setOrderQ] = useState(1000);
+  const [prodQ, setProdQ] = useState(1000);
 
   const [paperToOrder, setPaperToOrder] = useState<ResultProp[]>(
     [{
@@ -52,11 +56,18 @@ export default function Home() {
     var q_per_m = Math.floor(paper_m * cutterSize)
     var q_per_s = Math.floor(paper_s * cutterSize)
 
-    var result: ResultProp[] = calculatePapperRoll(orderQ, [q_per_s, q_per_m])
+    var result: ResultProp[] = calculatePapperRoll(prodQ, [q_per_s, q_per_m])
     console.log(result)
     setPaperToOrder([...result])
 
-  }, [paperH, paperGap, orderQ, cutterSize])
+  }, [paperH, paperGap, prodQ, cutterSize])
+
+  useEffect(() => {
+    setProdQ(orderQ  - remainInStock)
+  }, [orderQ, remainInStock])
+
+
+  
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between mobile:p-12 p-20 gap-4">
@@ -154,9 +165,27 @@ export default function Home() {
 
       <label className="form-control w-full max-w-xs">
         <div className="label">
-          <span className="label-text text-white"> จำนวนที่จะผลิต (ชิ้น)</span>
+          <span className="label-text text-white"> จำนวนที่สั่ง (ชิ้น)</span>
         </div>
         <input type="number" defaultValue={orderQ} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setOrderQ(Number(e.target.value))} step={1000} />
+        <div className="label">
+        </div>
+      </label>
+
+      <label className="form-control w-full max-w-xs">
+        <div className="label">
+          <span className="label-text text-white"> ที่เหลือในสต๊อก (ชิ้น)</span>
+        </div>
+        <input type="number" defaultValue={remainInStock} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" onChange={(e) => setRemainInStock(Number(e.target.value))} step={50} />
+        <div className="label">
+        </div>
+      </label>
+
+      <label className="form-control w-full max-w-xs">
+        <div className="label">
+          <span className="label-text text-white"> จำนวนที่จะผลิต (ชิ้น)</span>
+        </div>
+        <input type="number" defaultValue={prodQ} placeholder="ขนาดหน้ากว้าง" className="input input-bordered w-full max-w-xs" readOnly={true} />
         <div className="label">
         </div>
       </label>
